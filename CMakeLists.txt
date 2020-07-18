@@ -133,11 +133,9 @@ IF(WIN32)
 	LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/tiff-4.0.10)
 ENDIF(WIN32)
 
-	INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/libgeotiff-1.4.2/include)
-	INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/libgeotiff-1.4.2/libxtiff)
-	INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/src/tiff-4.0.10/include)
-
-
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/src/libgeotiff-1.4.2/include)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/src/libgeotiff-1.4.2/libxtiff)
+INCLUDE_DIRECTORIES(BEFORE ${CMAKE_SOURCE_DIR}/src/tiff-4.0.10/include)
 
 SET(SRC_PHOTOLAYER
             src/PhotoLayer_pi.cpp
@@ -169,12 +167,12 @@ INCLUDE("cmake/FindTinyXML.cmake")
 
 
 IF(TINYXML_FOUND)
- message (STATUS "Building with system tinyxml")
- INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
- ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRC_PHOTOLAYER})
- TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
+    message (STATUS "${CMLOC}Building with system tinyxml")
+    INCLUDE_DIRECTORIES(${TINYXML_INCLUDE_DIR})
+    ADD_LIBRARY(${PACKAGE_NAME} SHARED ${SRC_PHOTOLAYER})
+    TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${TINYXML_LIBRARIES})
 ELSE(TINYXML_FOUND)
- message (STATUS "Building with embedded tinyxml")
+    message (STATUS "${CMLOC}Building with embedded tinyxml")
  INCLUDE_DIRECTORIES(src/tinyxml/)
  SET(SRC_LTINYXML
             src/tinyxml/tinyxml.cpp
@@ -187,19 +185,19 @@ ENDIF(TINYXML_FOUND)
 ADD_DEFINITIONS(-DTIXML_USE_STL)
 
 IF(GEOTIFF_FOUND)
-  message (STATUS "Building with system libGeoTIFF")
-  INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-  TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${GEOTIFF_LIBRARY})
+    message (STATUS "${CMLOC}Building with system libGeoTIFF")
+    INCLUDE_DIRECTORIES(BEFORE ${GEOTIFF_INCLUDE_DIR})
+    TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${GEOTIFF_LIBRARY})
 ELSE(GEOTIFF_FOUND)
-  message (STATUS "libGeoTIFF not found, either disable the support for it or fail ro use an embedded version of it")
+    message (STATUS "${CMLOC}libGeoTIFF not found, either disable the support for it or fail ro use an embedded version of it")
 ENDIF(GEOTIFF_FOUND)
 
 IF(TIFF_FOUND)
-  message (STATUS "Building with system libTIFF")
-  INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIRS})
-  TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${LIBTIFF_LIBRARY})
+    message (STATUS "${CMLOC}Building with system libTIFF")
+    INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIRS})
+    TARGET_LINK_LIBRARIES(${PACKAGE_NAME} ${LIBTIFF_LIBRARY})
 ELSE(TIFF_FOUND)
-  message (STATUS "libTIFF not found, either disable the support for it or fail ro use an embedded version of it")
+    message (STATUS "${CMLOC}libTIFF not found, either disable the support for it or fail ro use an embedded version of it")
 ENDIF(TIFF_FOUND)
 
 
